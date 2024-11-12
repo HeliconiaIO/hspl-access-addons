@@ -6,7 +6,7 @@
     "summary": """This technical module allows blocking backend access and display the message""",
     "category": "Extra Tools",
     "images": [],
-    "version": "15.0.1.0.0",
+    "version": "16.0.1.0.0",
     "application": False,
     "author": "IT-Projects LLC, Eugene Molotov",
     "support": "it@it-projects.info",
@@ -23,12 +23,10 @@
     "auto_install": False,
     "installable": True,
     "assets": {
-        "web.assets_qweb": [
-            "database_block/static/src/xml/main.xml",
-        ],
         "web.assets_backend": [
             "database_block/static/src/css/main.css",
             "database_block/static/src/js/main.esm.js",
+            "database_block/static/src/xml/main_esm.xml",
         ],
     },
 }

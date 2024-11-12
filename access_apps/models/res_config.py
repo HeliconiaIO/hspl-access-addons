@@ -18,7 +18,7 @@ class ResConfigSettings(models.TransientModel):
         return super(ResConfigSettings, self)._install_modules(modules)
 
     @api.model
-    def default_get(self, fields):
+    def default_get(self, fields_list):
         # We restricted any access to apps by default (`ir.module.module`) but in `website_sale` module configuration
         # there is a field that gets its default value by searching in apps.
         # Without this there is a possibility to encounter the `Access Error` when trying to open settings
@@ -26,33 +26,32 @@ class ResConfigSettings(models.TransientModel):
 
         # TODO: this solution may lead to unexpected result
         # if some of default methods uses self self.env.user to compute default value
-        res = super(ResConfigSettings, self.sudo()).default_get(fields)
-
-        # modules: which modules are installed/to install
-        classified = self._get_classified_fields()
-        for name, module in classified["to_uninstall"]:
-            res[name] = module.state in ("installed", "to install", "to upgrade")
-            if self._fields[name].type == "selection":
-                res[name] = str(int(res[name]))
+        res = super(ResConfigSettings, self.sudo()).default_get(fields_list)
+        # # modules: which modules are installed/to install
+        # classified = self._get_classified_fields()
+        # for name, module in classified["to_uninstall"]:
+        #     res[name] = module.state in ("installed", "to install", "to upgrade")
+        #     if self._fields[name].type == "selection":
+        #         res[name] = str(int(res[name]))
 
         return res
 
     @api.model
-    def _get_classified_fields(self):
+    def _get_classified_fields(self, fnames=None):
         # classify mudules to install and uninstall independently
-        res = super(ResConfigSettings, self)._get_classified_fields()
+        res = super(ResConfigSettings, self)._get_classified_fields(fnames=fnames)
 
         to_uninstall_modules = []
 
-        for name, module in res["module"]:
-            if not self[name]:
-                if module and module.state in ("installed", "to upgrade"):
-                    to_uninstall_modules.append((name, module))
-
-        modules = list(set(res["module"]).difference(set(to_uninstall_modules)))
-
-        res["module"] = modules
-        res["to_uninstall"] = to_uninstall_modules
+        # for name, module in res["module"]:
+        #     if not self[name]:
+        #         if module and module.state in ("installed", "to upgrade"):
+        #             to_uninstall_modules.append((name, module))
+        #
+        # modules = list(set(res["module"]).difference(set(to_uninstall_modules)))
+        #
+        # res["module"] = modules
+        # res["to_uninstall"] = to_uninstall_modules
 
         return res
 

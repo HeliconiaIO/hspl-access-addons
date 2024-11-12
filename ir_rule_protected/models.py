@@ -1,5 +1,6 @@
 from odoo import SUPERUSER_ID, exceptions, fields, models
 from odoo.tools.translate import _
+from odoo.addons.base.models.ir_module import assert_log_admin_access
 
 MODULE_NAME = "ir_rule_protected"
 
@@ -32,6 +33,7 @@ class IRRule(models.Model):
 class Module(models.Model):
     _inherit = "ir.module.module"
 
+    @assert_log_admin_access
     def button_uninstall(self):
         for r in self:
             if r.name == MODULE_NAME and self.env.uid != SUPERUSER_ID:

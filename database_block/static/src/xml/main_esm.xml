@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="database_block.BlockMessage" owl="1">
+        <div t-attf-style="display: block; margin: 0 auto;">
+            <div
+                class="block_ui database_block_message alert alert-danger"
+                t-on-click='buyCredits'
+                id="alert-danger"
+            >
+                <t t-raw="message" />
+            </div>
+        </div>
+    </t>
+</templates>

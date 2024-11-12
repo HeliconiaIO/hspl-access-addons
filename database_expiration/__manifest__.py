@@ -7,7 +7,7 @@
     "summary": """With this module you can make database to expire""",
     "category": "Hidden",
     "images": [],
-    "version": "15.0.1.1.1",
+    "version": "16.0.1.0.0",
     "application": False,
     "author": "IT-Projects LLC, Eugene Molotov",
     "support": "apps@it-projects.info",

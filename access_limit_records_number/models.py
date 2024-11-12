@@ -15,8 +15,8 @@ class BaseLimitRecordsNumber(models.Model):
     domain = fields.Char(string="Domain", default="[]")
 
     @api.model
-    def default_get(self, default_fields):
-        res = super(BaseLimitRecordsNumber, self).default_get(default_fields)
+    def default_get(self, fields_list):
+        res = super(BaseLimitRecordsNumber, self).default_get(fields_list)
         res["trigger"] = "on_create_or_write"
         res["state"] = "code"
         res["code"] = "env['base.limit.records_number'].verify_table()"

@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
-    <t t-name="database_block.BlockMessage" owl="1">
-        <div t-attf-style="display: block; margin: 0 auto;">
-            <div
-                class="block_ui database_block_message alert alert-danger"
-                onclick='$(".o_navbar_apps_menu > button").trigger("click")'
-                id="alert-danger"
-            >
-                <t t-raw="message" />
-            </div>
-        </div>
-    </t>
-
     <t t-inherit="web.NavBar.AppsMenu" t-inherit-mode="extension" owl="1">
-        <xpath expr="//MenuItem" position="before">
+        <xpath expr="//DropdownItem" position="before">
             <div
                 class="alert alert-info database_block_message"
                 style="display: block; margin: 0 auto;"

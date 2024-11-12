@@ -10,14 +10,14 @@ class ResUsers(models.Model):
     _inherit = "res.users"
 
     @api.model
-    def fields_view_get(self, view_id=None, view_type="form", **kwargs):
+    def get_view(self, view_id=None, view_type='form', **options):
         if view_type == "form":
             last_uid = self.env["ir.config_parameter"].sudo().get_param(IR_CONFIG_NAME)
             if int(last_uid) != self.env.uid:
                 self.env["res.groups"].sudo()._update_user_groups_view()
 
-        return super(ResUsers, self).fields_view_get(
-            view_id=view_id, view_type=view_type, **kwargs
+        return super(ResUsers, self).get_view(
+            view_id=view_id, view_type=view_type, **options
         )
 
     def write(self, vals):
@@ -38,7 +38,6 @@ class ResGroups(models.Model):
         return super(ResGroups, self.sudo())._update_user_groups_view()
 
     @api.model
-    @api.returns("res.groups")
     def get_application_groups(self, domain=None):
         if domain is None:
             domain = []
