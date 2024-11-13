@@ -28,12 +28,12 @@ class ResConfigSettings(models.TransientModel):
         # if some of default methods uses self self.env.user to compute default value
         res = super(ResConfigSettings, self.sudo()).default_get(fields_list)
         # # modules: which modules are installed/to install
-        # classified = self._get_classified_fields()
-        # for name, module in classified["to_uninstall"]:
-        #     res[name] = module.state in ("installed", "to install", "to upgrade")
-        #     if self._fields[name].type == "selection":
-        #         res[name] = str(int(res[name]))
-
+        classified = self._get_classified_fields()
+        for module in classified["to_uninstall"]:
+            res[f'module_{module.name}'] = module.state in ("installed", "to install", "to upgrade")
+        for name, icp in classified['config']:
+            if self._fields[name].type == "selection":
+                res[name] = res[name]
         return res
 
     @api.model
@@ -41,17 +41,18 @@ class ResConfigSettings(models.TransientModel):
         # classify mudules to install and uninstall independently
         res = super(ResConfigSettings, self)._get_classified_fields(fnames=fnames)
 
-        to_uninstall_modules = []
+        to_uninstall_modules = self.env["ir.module.module"]
+        modules_env = self.env["ir.module.module"]
 
-        # for name, module in res["module"]:
-        #     if not self[name]:
-        #         if module and module.state in ("installed", "to upgrade"):
-        #             to_uninstall_modules.append((name, module))
-        #
-        # modules = list(set(res["module"]).difference(set(to_uninstall_modules)))
-        #
-        # res["module"] = modules
-        # res["to_uninstall"] = to_uninstall_modules
+        for module in res["module"]:
+            if not self[f'module_{module.name}']:
+                if module and module.state in ("installed", "to upgrade"):
+                    to_uninstall_modules += module
+
+        modules = list(set(res["module"].ids).difference(set(to_uninstall_modules.ids)))
+
+        res["module"] = modules_env.browse(modules)
+        res["to_uninstall"] = to_uninstall_modules
 
         return res
 
@@ -63,8 +64,5 @@ class ResConfigSettings(models.TransientModel):
         if to_uninstall and self.env["res.users"].has_group(
             "access_apps.group_allow_apps_only_from_settings"
         ):
-            to_uninstall_modules = self.env["ir.module.module"]
-            for _name, module in to_uninstall:
-                to_uninstall_modules += module
-            to_uninstall_modules.sudo().button_immediate_uninstall()
+            to_uninstall.sudo().button_immediate_uninstall()
         return res

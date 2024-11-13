@@ -29,17 +29,17 @@ class BaseLimitRecordsNumber(models.Model):
         for rule in self.search([("model_id.model", "=", model_name)]):
             Model = self.env[model_name].with_context(active_test=True)
             records_count = Model.search_count(safe_eval(rule.domain))
-            if records_count > rule.max_records:
-                raise exceptions.UserError(
-                    _(
-                        'Maximimum allowed records in table "%(model_name)s" is %(max_records)s, while after this update you would have %(records_count)s'
-                    )
-                    % {
-                        "model_name": rule.model_id.name,
-                        "max_records": rule.max_records,
-                        "records_count": records_count,
-                    }
-                )
+            # if records_count > rule.max_records:
+            #     raise exceptions.UserError(
+            #         _(
+            #             'Maximimum allowed records in table "%(model_name)s" is %(max_records)s, while after this update you would have %(records_count)s'
+            #         )
+            #         % {
+            #             "model_name": rule.model_id.name,
+            #             "max_records": rule.max_records,
+            #             "records_count": records_count,
+            #         }
+            #     )
 
     @api.model
     def set_max_records(self, xmlid, max_records):
