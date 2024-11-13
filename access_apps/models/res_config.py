@@ -31,9 +31,6 @@ class ResConfigSettings(models.TransientModel):
         classified = self._get_classified_fields()
         for module in classified["to_uninstall"]:
             res[f'module_{module.name}'] = module.state in ("installed", "to install", "to upgrade")
-        for name, icp in classified['config']:
-            if self._fields[name].type == "selection":
-                res[name] = res[name]
         return res
 
     @api.model
