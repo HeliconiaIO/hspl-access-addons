@@ -7,7 +7,7 @@
         <field name="name">Only admin can edit admin</field>
         <field name="model_id" ref="base.model_res_users" />
         <field name="global" eval="1" />
-        <field name="domain_force">[('id', '!=', 1)]</field>
+        <field name="domain_force">[('id', '!=', 2)]</field>
         <field name="perm_read" eval="False" />
         <field name="perm_write" eval="True" />
         <field name="perm_create" eval="True" />
