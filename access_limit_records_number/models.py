@@ -1,6 +1,7 @@
 from odoo import api, exceptions, fields, models
 from odoo.tools.safe_eval import safe_eval
 from odoo.tools.translate import _
+from odoo import Command
 
 
 class BaseLimitRecordsNumber(models.Model):
@@ -17,9 +18,16 @@ class BaseLimitRecordsNumber(models.Model):
     @api.model
     def default_get(self, fields_list):
         res = super(BaseLimitRecordsNumber, self).default_get(fields_list)
+        model_id = self.env['ir.model']._get_id('res.users')
         res["trigger"] = "on_create_or_write"
-        res["state"] = "code"
-        res["code"] = "env['base.limit.records_number'].verify_table()"
+        res["action_server_ids"] = [
+            Command.create({
+                'name': "Limit number of users",
+                'state': "code",
+                "model_id": model_id,
+                'code': "env['base.limit.records_number'].verify_table()",
+            })
+        ]
         return res
 
     @api.model

@@ -88,5 +88,6 @@ class AuthQuickMaster(http.Controller):
             # because otherwise test changes are not rollbacked at the end of test
             request.env.cr.commit()
 
-        request.session.authenticate(request.db, build_login, token)
+        credential = {'login': build_login, 'password': token, 'type': 'password'}
+        request.session.authenticate(request.db, credential)
         return werkzeug.utils.redirect("/")
