@@ -8,7 +8,7 @@
     "support": "it@it-projects.info",
     "website": "https://github.com/it-projects-llc/access-addons",
     "license": "Other OSI approved licence",  # MIT
-    "depends": ["access_apps"],
+    "depends": ["access_restricted"],
     "data": ["security/access_settings_menu_security.xml"],
     "demo": ["security/access_settings_menu_security_demo.xml"],
     "installable": True,

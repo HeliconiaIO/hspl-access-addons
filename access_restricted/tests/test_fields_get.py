@@ -1,9 +1,8 @@
-from odoo.tests.common import TransactionCase, tagged
+from odoo.tests.common import TransactionCase
 
 from odoo.addons.base.models.res_users import name_selection_groups
 
 
-@tagged("at_install", "post_install")
 class TestFieldsGet(TransactionCase):
     def test_base(self):
         demo_user = self.env.ref("base.user_demo")
@@ -18,8 +17,8 @@ class TestFieldsGet(TransactionCase):
         res = (
             self.env["res.users"]
             .with_user(demo_user)
-            .with_context(uid=demo_user.id)
-            .load_views([[view_users_form.id, "form"]])
+            .with_context({"uid": demo_user.id})
+            .get_views([[view_users_form.id, "form"]])
         )
 
         sel_groups = name_selection_groups([group_erp_manager.id])

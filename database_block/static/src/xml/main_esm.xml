@@ -7,7 +7,7 @@
                 t-on-click='buyCredits'
                 id="alert-danger"
             >
-                <t t-raw="message" />
+                <t t-out="message" />
             </div>
         </div>
     </t>

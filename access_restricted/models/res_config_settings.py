@@ -9,12 +9,14 @@ class ResConfigSettings(models.TransientModel):
     @api.model
     def _get_classified_fields(self, fnames=None):
         uid = self.env.uid
-        classified = super()._get_classified_fields(fnames=fnames)
-        if uid == SUPERUSER_ID:
+        classified = super(ResConfigSettings, self)._get_classified_fields(fnames)
+        config = self.env.context.get("config")
+        is_execute_stage = config and isinstance(config, models.Model)
+        if uid == SUPERUSER_ID or is_execute_stage:
             return classified
 
         group = []
-        ResUsers = self.env["res.users"]
+        ResUsers = self.env.user
         for name, groups, implied_group in classified["group"]:
             if ResUsers.search_count(
                 [("id", "=", uid), ("groups_id", "in", [implied_group.id])]
@@ -37,7 +39,7 @@ class ResConfigSettings(models.TransientModel):
             if not name.startswith("group_"):
                 continue
             f = self._fields[name]
-            ResUsers = self.env["res.users"]
+            ResUsers = self.env.user
             if ResUsers.has_group(f.implied_group) or ResUsers.has_group(
                 "access_restricted.group_allow_add_implied_from_settings"
             ):

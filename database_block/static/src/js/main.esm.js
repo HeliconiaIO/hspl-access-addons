@@ -1,28 +1,28 @@
 /** @odoo-module **/
-import { ActionContainer } from "@web/webclient/actions/action_container";
-import { NavBar } from "@web/webclient/navbar/navbar";
-import { patch } from "web.utils";
-import { session } from "@web/session";
-import { Component, xml, useState, onMounted } from "@odoo/owl";
-import { renderToString } from "@web/core/utils/render";
-const { Markup } = require('web.utils');
-const { _t } = require('web.core');
 
-patch(ActionContainer.prototype, "ametras_document_sbs_preview.ActionContainer", {
+import { ActionContainer } from "@web/webclient/actions/action_container";
+import { patch } from "@web/core/utils/patch";
+import { session } from "@web/session";
+import { useService } from "@web/core/utils/hooks";
+import { Component, xml, useState, onMounted, markup } from "@odoo/owl";
+import { renderToString } from "@web/core/utils/render";
+import { _t } from "@web/core/l10n/translation";
+
+patch(ActionContainer.prototype, {
     setup() {
-        this._super();
+        super.setup(...arguments);
         onMounted(() => this._mounted());
     },
     _mounted() {
         if (this.databaseBlockMessage) {
-            console.log("this.databaseBlockMessage", this.databaseBlockMessage, Markup(this.databaseBlockMessage))
+            console.log("this.databaseBlockMessage", this.databaseBlockMessage, markup(this.databaseBlockMessage))
             const blockMessage = renderToString(
                 "database_block.BlockMessage",
                 {
-                    message: Markup(_t(this.databaseBlockMessage)),
+                    message: markup(_t(this.databaseBlockMessage)),
                 }
             );
-            $.blockUI({ message: blockMessage });
+//            $.blockUI({ message: blockMessage }); TODO : Improved Block MSG
         }
     },
     get databaseBlockMessage() {
