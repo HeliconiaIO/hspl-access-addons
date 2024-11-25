@@ -13,16 +13,23 @@ patch(ActionContainer.prototype, {
         super.setup(...arguments);
         onMounted(() => this._mounted());
     },
-    _mounted() {
-        if (this.databaseBlockMessage) {
-            console.log("this.databaseBlockMessage", this.databaseBlockMessage, markup(this.databaseBlockMessage))
-            const blockMessage = renderToString(
-                "database_block.BlockMessage",
-                {
-                    message: markup(_t(this.databaseBlockMessage)),
-                }
+    async _mounted() {
+        const blockMessage = this.databaseBlockMessage;
+
+        const document = this.root?.ownerDocument || globalThis.document;
+        if (document.readyState === "loading") {
+            await new Promise((resolve) =>
+                document.addEventListener("DOMContentLoaded", resolve)
             );
-//            $.blockUI({ message: blockMessage }); TODO : Improved Block MSG
+        }
+
+        this.root ||= document.body;
+
+        if (blockMessage) {
+            const renderedMessage = renderToString("database_block.BlockMessage", {
+                message: markup(_t(blockMessage)),  // Translate the block message text
+            });
+            this.root.innerHTML = renderedMessage;
         }
     },
     get databaseBlockMessage() {

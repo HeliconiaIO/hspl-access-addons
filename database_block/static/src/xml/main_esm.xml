@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
     <t t-name="database_block.BlockMessage" owl="1">
-        <div t-attf-style="display: block; margin: 0 auto;">
+        <div t-attf-style="display: flex; justify-content: center; align-items: center; height: 100vh;">
             <div
                 class="block_ui database_block_message alert alert-danger"
                 t-on-click='buyCredits'

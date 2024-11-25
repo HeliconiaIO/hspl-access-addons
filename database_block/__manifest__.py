@@ -25,7 +25,6 @@
     "assets": {
         "web.assets_backend": [
             "database_block/static/src/css/main.css",
-            "database_block/static/src/js/block_ui.js",
             "database_block/static/src/js/main.esm.js",
             "database_block/static/src/xml/main_esm.xml",
         ],
