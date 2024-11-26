@@ -47,7 +47,7 @@ class ResConfigSettings(models.TransientModel):
 
             fields[name].update(
                 readonly=True,
-                help=ustr(fields[name].get("help", ""))
+                help=fields[name].get("help", "")
                 + _(
                     "\n\nYou don't have access to change this settings, because you administration rights are restricted"
                 ),
